@@ -20,15 +20,22 @@ dependencies:
   intl: ^0.20.2
   flutter_svg: ^2.0.17
   flutter_secure_storage: ^9.2.4
-  permission_handler: ^12.0.0+1
+  # permission_handler: ^12.0.0+1
   logger: ^2.5.0
   dotted_border: ^2.1.0
+  retrofit: ^4.1.0
+  go_router: ^13.2.0
+  get_it: ^7.6.4
+  json_annotation: ^4.8.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
   flutter_launcher_icons: ^0.14.3
+  retrofit_generator: ^8.1.0
+  build_runner: ^2.4.8
+  json_serializable: ^6.6.2
 
 flutter:
   uses-material-design: true
@@ -40,28 +47,86 @@ flutter:
     # - assets/lottie/
     - .env
 
-  # fonts:
-  #   - family: Lato
-  #     fonts:
-  #       - asset: assets/fonts/lato/Lato-Light.ttf
-  #         weight: 300
+  fonts:
+    - family: Rubik
+      fonts:
+        - asset: assets/fonts/rubik/Rubik-Regular.ttf
+          weight: 400
 
-  #       - asset: assets/fonts/lato/Lato-Regular.ttf
-  #         weight: 400
+        - asset: assets/fonts/rubik/Rubik-Medium.ttf
+          weight: 600
 
-  #   - family: Raleway
-  #     fonts:
-  #       - asset: assets/fonts/raleway/Raleway-Bold.ttf
-  #         weight: 700
+        - asset: assets/fonts/rubik/Rubik-Bold.ttf
+          weight: 700
 
-  #       - asset: assets/fonts/raleway/Raleway-Heavy.ttf
-  #         weight: 900
+        - asset: assets/fonts/rubik/Rubik-Light.ttf
+          weight: 300
+      
+        # italic
+        - asset: assets/fonts/rubik/Rubik-LightItalic.ttf
+          weight: 300
+          style: italic
 
-  #       - asset: assets/fonts/raleway/Raleway-Medium.ttf
-  #         weight: 600
+        - asset: assets/fonts/rubik/Rubik-Italic.ttf
+          weight: 400
+          style: italic
 
-  #       - asset: assets/fonts/raleway/Raleway-Regular.ttf
-  #         weight: 400
+        - asset: assets/fonts/rubik/Rubik-MediumItalic.ttf
+          weight: 600
+          style: italic
 
-  #       - asset: assets/fonts/raleway/Raleway-SemiBold.ttf
-  #         weight: 600
+        - asset: assets/fonts/rubik/Rubik-BoldItalic.ttf
+          weight: 700
+
+        - asset: assets/fonts/rubik/Rubik-Black.ttf
+          weight: 900
+
+        - asset: assets/fonts/rubik/Rubik-BlackItalic.ttf
+          weight: 900
+
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Regular.ttf
+          weight: 400
+
+        - asset: assets/fonts/roboto/Roboto-Medium.ttf
+          weight: 600
+
+        - asset: assets/fonts/roboto/Roboto-Bold.ttf
+          weight: 700
+
+        - asset: assets/fonts/roboto/Roboto-Light.ttf
+          weight: 300
+      
+        # italic
+        - asset: assets/fonts/roboto/Roboto-LightItalic.ttf
+          weight: 300
+          style: italic
+
+        - asset: assets/fonts/roboto/Roboto-Italic.ttf
+          weight: 400
+          style: italic
+
+        - asset: assets/fonts/roboto/Roboto-MediumItalic.ttf
+          weight: 600
+          style: italic
+
+        - asset: assets/fonts/roboto/Roboto-BoldItalic.ttf
+          weight: 700
+
+        - asset: assets/fonts/roboto/Roboto-Black.ttf
+          weight: 900
+
+        - asset: assets/fonts/roboto/Roboto-BlackItalic.ttf
+          weight: 900
+
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/poppins/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/poppins/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/poppins/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/poppins/Poppins-Bold.ttf
+          weight: 700
