@@ -7,7 +7,9 @@ class AppStyle {
   static const Color green = Color(0xFF009933);
   static const Color white = Color(0xFFFFFFFF);
   static const Color bluePrimary = Color(0xFF239FE7);
-  static const Color grey = Color(0xFFCCCCCC);
+  static const Color blue2 = Color(0xFFB7E3FD);
+  static const Color grey = Color(0xFF666666);
+  static const Color grey2 = Color(0xFFF2F2F2);
   static const Color orange = Color(0xFFFF8000);
   static const Color maroon = Color(0xFF890000);
 

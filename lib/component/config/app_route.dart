@@ -3,8 +3,7 @@ import 'package:go_router/go_router.dart';
 export 'package:go_router/go_router.dart';
 
 import '../../main.dart';
-import '../../screens/riverpod/screens/home/home_screen.dart';
-// import '../../screens/home/home_screen.dart';
+import '../../screens/home/home_screen.dart';
 
 class AppRoute {
   // path

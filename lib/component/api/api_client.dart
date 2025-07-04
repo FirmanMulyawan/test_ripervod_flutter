@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-
+import '../api/models/friends_response.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'api_client.g.dart';
@@ -8,6 +8,6 @@ part 'api_client.g.dart';
 abstract class ApiClient {
   factory ApiClient(Dio dio, {String baseUrl}) = _ApiClient;
 
-  // @GET('home/summary')
-  // Future<HomeSummaryResponse> getHomeSummary();
+  @GET('?results=200')
+  Future<FriendsResponse> getListData();
 }
