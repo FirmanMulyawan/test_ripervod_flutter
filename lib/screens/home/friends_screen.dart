@@ -14,17 +14,11 @@ class FriendsScreen extends ConsumerStatefulWidget {
 
 class _FriendsScreenState extends ConsumerState<FriendsScreen> {
   final ScrollController scrollController = ScrollController();
-  final Map<String, GlobalKey> _keysMap = {};
 
   @override
   Widget build(BuildContext context) {
-    final getListData = ref.watch(getListDataProvider);
+    final friendsListData = ref.watch(friendsListDataProvider);
     final activeIndex = ref.watch(friendsNotifierProvider);
-
-    Future<void> refresh() async {
-      ref.invalidate(getListDataProvider);
-      await ref.read(getListDataProvider.future);
-    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
@@ -53,191 +47,149 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen> {
               color: AppStyle.grey,
             ),
           ),
-          getListData.when(
-              data: (data) {
-                return Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: RefreshIndicator(
-                          onRefresh: refresh,
-                          child: ListView.builder(
-                              controller: scrollController,
-                              itemCount: getListData.value?.length ?? 0,
-                              padding: const EdgeInsets.only(bottom: 200),
-                              itemBuilder: (context, index) {
-                                final users =
-                                    getListData.value?[index]["result"];
-                                final name = getListData.value?[index]['name'];
+          Expanded(
+              child: Row(children: [
+            Expanded(
+                child: ListView.builder(
+                    itemCount: friendsListData.length,
+                    controller: scrollController,
+                    padding: const EdgeInsets.only(bottom: 200),
+                    itemBuilder: (context, index) {
+                      final users = friendsListData[index].result;
+                      final group = friendsListData[index].group ?? '';
 
-                                _keysMap.putIfAbsent(name, () => GlobalKey());
+                      return VisibilityDetector(
+                        // onVisibilityChanged: (info) {
+                        //   final String group =
+                        //       friendsListData[index].group ?? '';
+                        //   final String? lastActive =
+                        //       ref.watch(friendsNotifierProvider);
 
-                                return VisibilityDetector(
-                                  key: Key('$name'),
-                                  onVisibilityChanged: (info) {
-                                    final String currentLetter =
-                                        getListData.value?[index]['name'];
+                        //   if (group != lastActive) {
+                        //     ref
+                        //         .read(friendsNotifierProvider.notifier)
+                        //         .setTab(group);
+                        //   }
+                        // },
+                        key: Key('user-item-$index'),
+                        onVisibilityChanged: (info) {
+                          if (info.visibleFraction > 0.5) {
+                            ref
+                                .read(friendsNotifierProvider.notifier)
+                                .setTab(group);
+                          }
+                        },
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(group,
+                                  style: AppStyle.rubikSemiBold(
+                                      size: 20, textColor: AppStyle.black)),
+                              ...users!.map((user) {
+                                final name = user.name;
+                                final imageUrl = user.imageUrl;
 
-                                    final String? lastActive =
-                                        ref.watch(friendsNotifierProvider);
-
-                                    if (currentLetter != lastActive) {
-                                      ref
-                                          .read(
-                                              friendsNotifierProvider.notifier)
-                                          .setTab(currentLetter);
-                                    }
-                                  },
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                          key: _keysMap[name],
-                                          "${getListData.value?[index]['name']}",
-                                          style: AppStyle.rubikSemiBold(
-                                              size: 20,
-                                              textColor: AppStyle.black)),
-                                      ...users.map((user) {
-                                        final name = user['name'];
-                                        final first = name['first'];
-                                        final picture =
-                                            user['picture']['medium'];
-
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 10),
-                                          child: Row(
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                child: Image.network(
-                                                  picture,
-                                                  width: 50,
-                                                  height: 50,
-                                                  fit: BoxFit.cover,
-                                                  loadingBuilder: (context,
-                                                      child, loadingProgress) {
-                                                    if (loadingProgress ==
-                                                        null) {
-                                                      return child;
-                                                    }
-                                                    return SizedBox(
-                                                      width: 50,
-                                                      height: 50,
-                                                      child: Center(
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                          strokeWidth: 2,
-                                                          value: loadingProgress
-                                                                      .expectedTotalBytes !=
-                                                                  null
-                                                              ? loadingProgress
-                                                                      .cumulativeBytesLoaded /
-                                                                  (loadingProgress
-                                                                          .expectedTotalBytes ??
-                                                                      1)
-                                                              : null,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  errorBuilder: (context, error,
-                                                      stackTrace) {
-                                                    return Container(
-                                                      width: 50,
-                                                      height: 50,
-                                                      color:
-                                                          Colors.grey.shade300,
-                                                      child: const Icon(
-                                                          Icons.error,
-                                                          size: 24),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                "$first",
-                                                style: AppStyle.rubikRegular(
-                                                    size: 15),
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      }).toList(),
-                                    ],
-                                  ),
-                                );
-                              }),
-                        ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        width: 40,
-                        child: ListView.builder(
-                            itemCount: getListData.value?.length ?? 0,
-                            padding: const EdgeInsets.only(bottom: 200),
-                            itemBuilder: (context, index) {
-                              final name = getListData.value?[index]['name'];
-                              return Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      final contextKey =
-                                          _keysMap[name]?.currentContext;
-
-                                      if (contextKey != null) {
-                                        WidgetsBinding.instance
-                                            .addPostFrameCallback((_) {
-                                          Scrollable.ensureVisible(
-                                            contextKey,
-                                            duration: const Duration(
-                                                milliseconds: 300),
-                                          );
-                                        });
-
-                                        ref
-                                            .read(friendsNotifierProvider
-                                                .notifier)
-                                            .setTab(name);
-                                      }
-                                    },
-                                    child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        decoration: BoxDecoration(
-                                          color: activeIndex == name
-                                              ? AppStyle.blue2
-                                              : AppStyle.grey2,
+                                return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: Row(
+                                      children: [
+                                        ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(30),
+                                              BorderRadius.circular(8),
+                                          child: Image.network(
+                                            imageUrl ?? '-',
+                                            width: 50,
+                                            height: 50,
+                                            fit: BoxFit.cover,
+                                            loadingBuilder: (context, child,
+                                                loadingProgress) {
+                                              if (loadingProgress == null) {
+                                                return child;
+                                              }
+                                              return SizedBox(
+                                                width: 50,
+                                                height: 50,
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                    value: loadingProgress
+                                                                .expectedTotalBytes !=
+                                                            null
+                                                        ? loadingProgress
+                                                                .cumulativeBytesLoaded /
+                                                            (loadingProgress
+                                                                    .expectedTotalBytes ??
+                                                                1)
+                                                        : null,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return Container(
+                                                width: 50,
+                                                height: 50,
+                                                color: Colors.grey.shade300,
+                                                child: const Icon(Icons.error,
+                                                    size: 24),
+                                              );
+                                            },
+                                          ),
                                         ),
-                                        child: Center(
-                                            child: Text('$name',
-                                                style: AppStyle.rubikRegular(
-                                                  textColor: AppStyle.grey,
-                                                )))),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  )
-                                ],
-                              );
-                            }),
-                      )
-                    ],
-                  ),
-                );
-              },
-              error: (error, stack) => Center(
-                    child: Text("Error: $error"),
-                  ),
-              loading: () => const Center(child: CircularProgressIndicator()))
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          "$name",
+                                          style:
+                                              AppStyle.rubikRegular(size: 15),
+                                        )
+                                      ],
+                                    ));
+                              }),
+                            ]),
+                      );
+                    })),
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: 40,
+              child: ListView.builder(
+                  itemCount: friendsListData.length,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final group = friendsListData[index].group;
+                    return Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                color: activeIndex == group
+                                    ? AppStyle.blue2
+                                    : AppStyle.grey2,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Center(
+                                  child: Text('$group',
+                                      style: AppStyle.rubikRegular(
+                                        size: 12,
+                                        textColor: AppStyle.grey,
+                                      )))),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        )
+                      ],
+                    );
+                  }),
+            )
+          ]))
         ],
       ),
     );

@@ -6,24 +6,24 @@ part of 'friends_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getListDataHash() => r'd37013a897afe9622921356e7d9e8d24a11ce0db';
+String _$friendsListDataHash() => r'1ddfecc602028f4f2c7b4981b1e32017a87b4245';
 
-/// See also [getListData].
-@ProviderFor(getListData)
-final getListDataProvider =
-    AutoDisposeFutureProvider<List<Map<String, dynamic>>>.internal(
-  getListData,
-  name: r'getListDataProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$getListDataHash,
+/// See also [friendsListData].
+@ProviderFor(friendsListData)
+final friendsListDataProvider =
+    AutoDisposeProvider<List<FriendsV2Response>>.internal(
+  friendsListData,
+  name: r'friendsListDataProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$friendsListDataHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef GetListDataRef
-    = AutoDisposeFutureProviderRef<List<Map<String, dynamic>>>;
+typedef FriendsListDataRef = AutoDisposeProviderRef<List<FriendsV2Response>>;
 String _$friendsNotifierHash() => r'3df32703eef4822845b6e09dedfbd432fa21e287';
 
 /// See also [FriendsNotifier].
