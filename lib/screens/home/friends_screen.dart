@@ -14,6 +14,7 @@ class FriendsScreen extends ConsumerStatefulWidget {
 
 class _FriendsScreenState extends ConsumerState<FriendsScreen> {
   final ScrollController scrollController = ScrollController();
+  final Map<String, GlobalKey> _keysMap = {};
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +59,8 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen> {
                       final users = friendsListData[index].result;
                       final group = friendsListData[index].group ?? '';
 
+                      _keysMap.putIfAbsent(group, () => GlobalKey());
+
                       return VisibilityDetector(
                         // onVisibilityChanged: (info) {
                         //   final String group =
@@ -83,7 +86,9 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(group,
+                              Text(
+                                  key: _keysMap[group],
+                                  group,
                                   style: AppStyle.rubikSemiBold(
                                       size: 20, textColor: AppStyle.black)),
                               ...users!.map((user) {
@@ -165,7 +170,21 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen> {
                     return Column(
                       children: [
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            final contextKey = _keysMap[group]?.currentContext;
+                            if (contextKey != null) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                Scrollable.ensureVisible(
+                                  contextKey,
+                                  duration: const Duration(milliseconds: 300),
+                                );
+                              });
+
+                              ref
+                                  .read(friendsNotifierProvider.notifier)
+                                  .setTab(group ?? '');
+                            }
+                          },
                           child: Container(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10),
